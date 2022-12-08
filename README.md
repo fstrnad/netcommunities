@@ -5,7 +5,7 @@ We apply community detection on climate networks of Extreme Rainfall Events (ERE
 
 An intuition on network community detection is given by:
 ***
-![fig1](outputs/images/community_detection_scheme.pdf)
+![fig1](outputs/images/community_detection_scheme.png)
 ***
 
 ## Clone the repo and install all required packages 
@@ -51,7 +51,7 @@ The figures should look somehow similiar to the following:
 ![fig2](outputs/images/communities_lead_lag_EIO.png)
 
 ***
-![fig3](outputs/images/conditioned_bsiso_phase.pdf)
+![fig3](outputs/images/conditioned_bsiso_phase.png)
 
 ***
 ![fig4](outputs/images/sst_background_all.png)
