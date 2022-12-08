@@ -5,7 +5,7 @@ We apply community detection on climate networks of Extreme Rainfall Events (ERE
 
 An intuition on network community detection is given by:
 ***
-![fig1](outputs/images/community_detection_scheme.png)
+![fig1](outputs/images/community_detection_full.png)
 ***
 
 ## Clone the repo and install all required packages 
@@ -27,7 +27,7 @@ pip install -e submodules/climnet
 ```
 
 ### 3. Download data
-Download Precipitation data from [MSWEP](http://www.gloh2o.org/mswep/). Regrid the file to 1°x1° daily resolution (using e.g. the [geoutils](https://github.com/fstrnad/geoutils) package and store the merged file in the data folder.
+Download Precipitation data from [MSWEP](http://www.gloh2o.org/mswep/). Regrid the file to 1°x1° daily resolution (using e.g. the [geoutils](https://github.com/fstrnad/geoutils) package) and store the merged file in the data folder.
 
 ## Reproduce plots
 
