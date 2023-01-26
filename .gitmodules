@@ -2,3 +2,6 @@
 	path = submodules/climnet
 	url = git@github.com:mlcs/climnet.git
 	branch = main
+[submodule "submodules/geoutils"]
+	path = submodules/geoutils
+	url = git@github.com:fstrnad/geoutils.git
