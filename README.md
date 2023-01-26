@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/465245243.svg)](https://zenodo.org/badge/latestdoi/465245243)
+[![DOI](https://zenodo.org/badge/575759590.svg)](https://zenodo.org/badge/latestdoi/575759590)
 
 # BSISO extreme rainfall propagation modulated by Pacific sea surface temperatures
 We apply community detection on climate networks of Extreme Rainfall Events (EREs) to determine their intraseasonal variability.
