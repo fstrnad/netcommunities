@@ -24,9 +24,6 @@ import geoutils.geodata.wind_dataset as wds
 
 # Run the null model
 name = "mswep"
-grid_type = "fibonacci"
-grid_step = 0.5
-
 grid_type = "fekete"
 grid_step = 1
 
@@ -67,35 +64,11 @@ nc_files_u = []
 nc_files_v = []
 nc_files_w = []
 
-plevels = [200, 300,
-           500,
-           800, 850,
-           900, 1000]
 plevels = [100, 200, 300,
            400, 500, 600,
-           700, 800, 850,
-           900, 1000]
-# plevels = [
-#     50,
-#     100, 150, 200,
-#     250, 300, 350,
-#     400, 450, 500,
-#     550, 600, 650,
-#     700, 750, 800,
-#     850, 900, 950,
-#     1000]
+           700, 750, 800,
+           850, 900, 950]
 
-# plevels = [200,
-#            400,
-#            500,
-#            600,
-#            800,
-#            1000]
-
-# plevels = [
-#     100,
-#     900
-# ]
 for plevel in plevels:
     dataset_file_u = output_dir + \
         f"/climate_data/era5_u_{2.5}_{plevel}_ds.nc"
@@ -113,7 +86,8 @@ ds_wind = wds.Wind_Dataset(load_nc_arr_u=nc_files_u,
                            plevels=plevels,
                            can=True,
                            an_types=['JJAS'],
-                           month_range=['Jun', 'Sep']
+                           month_range=['Jun', 'Sep'],
+                           init_mask=False,
                            )
 # %%
 # Helmholtz Decomposition and Rossby Wave Source
@@ -165,7 +139,6 @@ reload(mse)
 nc_files_q = []
 nc_files_t = []
 nc_files_z = []
-
 
 plevels = [
     200,
@@ -316,7 +289,7 @@ savepath = f"{plot_dir}/{output_folder}/propagation/olr_hovmoeller_{n}_cluster.n
 # gut.save_np_dict(k_means_tps_lon_lat,
 #                  savepath)
 # %%
-# Plot the Hovemölller diagrams
+# Load the Hovemölller diagrams time points
 n = 3
 type_names = [
     'Canonical',
@@ -358,12 +331,12 @@ for idx, (group) in enumerate(plot_order):
                         ax=im['ax'][idx*2],
                         z=mean,
                         levels=9,
-                        title=f'Lon: {group} ({len(sel_tps)} cases)',
+                        title=f'Lon: {group} ({len(sel_tps)} samples)',
                         y_title=1.,
                         orientation='vertical',
                         cmap='RdBu_r',
                         tick_step=2,
-                        round_dec=2,
+                        round_dec=1,
                         plot_type='contourf',
                         vmin=vmin, vmax=vmax,
                         xlabel='Longitude [degree]',
@@ -384,7 +357,7 @@ for idx, (group) in enumerate(plot_order):
                         z=mean,
                         ax=im['ax'][idx*2 + 1],
                         levels=12,
-                        title=f'Lat: {group} ({len(sel_tps)} cases)',
+                        title=f'Lat: {group} ({len(sel_tps)} samples)',
                         y_title=1,
                         orientation='vertical',
                         cmap='RdBu_r',
@@ -410,17 +383,6 @@ savepath = plot_dir +\
     f"{output_folder}/propagation/olr_hovmoeller_{region}_{var_type}_k_means_lon_lat.png"
 cplt.save_fig(savepath, fig=im['fig'])
 
-# %%
-# SST data
-reload(bds)
-dataset_file = output_dir + \
-    f"/climate_data/era5_sst_{2.5}_ds.nc"
-
-ds_sst = bds.BaseDataset(load_nc=dataset_file,
-                         can=True,
-                         detrend=True,
-                         an_types=['JJAS', 'month', 'dayofyear'],
-                         )
 
 # %%
 # Temperatures
@@ -508,37 +470,10 @@ cplt.add_colorbar(im=im_comp, fig=im['fig'],
 savepath = plot_dir +\
     f"{output_folder}/propagation/sst_{region}_groups.png"
 cplt.save_fig(savepath, fig=im['fig'])
-# %%
-reload(cplt)
-im = cplt.create_multi_plot(nrows=1, ncols=3,
-                            # hspace=0.4,
-                            wspace=0.2,
-                            projection='PlateCarree',
-                            central_longitude=180,
-                            end_idx=n)
-im_comp = cplt.plot_map(
-    # mean,
-    ds_sst.mask,
-    ax=im['ax'][0],
-    title=f'{group}',
-    # projection='Robinson',
-    # set_global=True,
-    cmap='RdBu_r',
-    plot_type='contourf',
-    levels=9,
-    vmin=vmin, vmax=vmax,
-    bar=True,
-    plt_grid=True,
-    # extend='both',
-    orientation='horizontal',
-    significance_mask=ds_sst.mask,
-    hatch_type='..',
-    central_longitude=180
-)
 
 
 # %%
-# Plot for paper OLR Hovmöller + SST patterns
+# Plot for paper OLR Hovmöller + Maritime Continent
 reload(cplt)
 reload(sut)
 lon_range_c = [-70, 35]
@@ -594,7 +529,7 @@ for idx, (group) in enumerate(plot_order):
                         ax=axs[idx*ncols],
                         z=k_data,
                         levels=9,
-                        vertical_title=f'{group} ({len(sel_tps)} cases)',
+                        vertical_title=f'{group} ({len(sel_tps)} samples)',
                         title='Zonal Hovmöller diagrams' if idx == 0 else None,
                         x_title_offset=-0.3,
                         orientation='vertical',
@@ -619,6 +554,18 @@ for idx, (group) in enumerate(plot_order):
         lw=3,
         label='Maritime Continent barrier')
 
+    if idx == 0:
+        cplt.plot_arrow(ax=axs[idx*ncols],
+                        x1=60, y1=-3,
+                        x2=145, y2=17,
+                        label='5.4 m/s')
+
+    if idx == 1:
+        cplt.plot_arrow(ax=axs[idx*ncols],
+                        x1=60, y1=-3,
+                        x2=125, y2=18,
+                        label='4 m/s')
+
     k_data = tu.get_sel_tps_ds(
         ds=hov_data_lat, tps=sel_tps).mean(dim='time')
     h_im = cplt.plot_2D(x=lats, y=vtimes,
@@ -639,6 +586,18 @@ for idx, (group) in enumerate(plot_order):
                         xticks=lat_ticks,
                         xticklabels=lat_ticklabels,
                         )
+
+    if idx == 0:
+        cplt.plot_arrow(ax=axs[idx*ncols+1],
+                        x1=0, y1=0,
+                        x2=20, y2=15,
+                        label='1.7 m/s')
+
+    if idx == 1:
+        cplt.plot_arrow(ax=axs[idx*ncols+1],
+                        x1=0, y1=0,
+                        x2=20, y2=18,
+                        label='1.4 m/s')
 
 
 cplt.add_colorbar(im=h_im, fig=fig,
@@ -662,7 +621,7 @@ savepath = plot_dir +\
 cplt.save_fig(savepath, fig=fig)
 
 # %%
-# Plot SSTs only
+# SST data
 reload(tu)
 reload(cplt)
 lon_range_c = [-70, 35]
@@ -680,71 +639,6 @@ data_cut = tu.get_month_range_data(
     data_cut, start_month=start_month,
     end_month=end_month)
 
-# %%
-vmax_sst = 1
-vmin_sst = -vmax_sst
-
-an_type = 'dayofyear'
-var_type = f'an_{an_type}'
-label_sst = r'SST (wrt JJAS)-Anomalies [K]'
-
-ncols = 3
-im = cplt.create_multi_plot(nrows=1,
-                            ncols=ncols,
-                            # figsize=(14, 6),
-                            projection='PlateCarree',
-                            orientation='horizontal',
-                            # hspace=0.25,
-                            central_longitude=180,
-                            wspace=0.2,
-                            end_idx=3
-                            )
-q_th = 0.05
-plot_order = ['Canonical',
-              'Eastward Blocked',
-              'Stationary']
-for idx, (group) in enumerate(plot_order):
-    sel_tps = k_means_tps_lon_lat[group]
-
-    this_comp_ts = tu.get_sel_tps_ds(
-        data_cut, tps=sel_tps)
-
-    mean, pvalues_ttest = sut.ttest_field(
-        this_comp_ts[var_type], data_cut[var_type])
-    mask = sut.field_significance_mask(
-        pvalues_ttest, alpha=0.05, corr_type=None)
-
-    im_sst = cplt.plot_map(mean,
-                           ax=im['ax'][idx],
-                           title=f'{group}',
-                           cmap='RdBu_r',
-                           plot_type='contourf',
-                           levels=9,
-                           vmin=vmin_sst, vmax=vmax_sst,
-                           projection='PlateCarree',
-                           bar=False,
-                           plt_grid=True,
-                           extend='both',
-                           orientation='horizontal',
-                           significance_mask=mask,
-                           hatch_type='..'
-                           )
-
-cplt.add_colorbar(im=im_sst, fig=im['fig'],
-                  sci=None,
-                  label=label_sst,
-                  x_pos=0.2,
-                  width=0.6,
-                  height=0.05,
-                  y_pos=0.05,
-                  round_dec=2,
-                  tick_step=3
-                  )
-
-
-savepath = plot_dir +\
-    f"{output_folder}/paper_plots/sst_background_all.png"
-cplt.save_fig(savepath, fig=im['fig'])
 
 # %%
 # Plot for paper multiple pressure levels wind fields
@@ -778,13 +672,12 @@ var_type = f'an_{an_type}'
 label_msf_u = r'$\Psi_u$ JJAS-anomalies [$\frac{kg}{m^2s}$]'
 label_msf_v = r'$\Psi_v$ JJAS-anomalies [$\frac{kg}{m^2s}$]'
 label_vert_u = r'$\bar{\Psi}_u$  JJAS-anomalies [$\frac{kg}{m^2s}$]'
-label_vert_v = r'$\bar{\Psi}_u$  JJAS-anomalies [$\frac{kg}{m^2s}$]'
+label_vert_v = r'$\bar{\Psi}_v$  JJAS-anomalies [$\frac{kg}{m^2s}$]'
 
 vmax_vert = 4e4
 vmin_vert = -vmax_vert
 vmax_map = 3e4
 vmin_map = -vmax_map
-
 
 lon_ticks = [60, 120, 180, 240]
 lon_ticklabels = ['60°E', '120°E', '180°', '120°W']
@@ -897,7 +790,6 @@ for idx, (group) in enumerate(plot_order):
                               plot_type='contourf',
                               levels=9,
                               vmin=vmin_map, vmax=vmax_map,
-                              projection='PlateCarree',
                               bar=False,
                               plt_grid=True,
                               extend='both',
@@ -956,7 +848,6 @@ for idx, (group) in enumerate(plot_order):
                               plot_type='contourf',
                               levels=9,
                               vmin=vmin_map, vmax=vmax_map,
-                              projection='PlateCarree',
                               bar=False,
                               plt_grid=True,
                               extend='both',
@@ -1023,8 +914,8 @@ plevel_u = 850
 plevel_v = 850
 
 an_type = 'JJAS'
-label_gph = rf'{plevel_gph}-hPa GPH (JJAS)-Anomalies [m]'
-label_gph = rf'{plevel_gph}-hPa Q JJAS-Anomalies []'
+label_gph = rf'{plevel_gph}-hPa GPH JJAS-Anomalies [m]'
+label_gph = rf'{plevel_gph}-hPa q JJAS-Anomalies []'
 label_uwind = rf'{plevel_u}-hPa u-winds JJAS anomalies [m/s]'
 label_vwind = rf'{plevel_u}-hPa v-winds JJAS anomalies [m/s]'
 
@@ -1098,15 +989,12 @@ for idx, (group) in enumerate(plot_order):
                            plot_type='contourf',
                            levels=9,
                            vmin=vmin_gph, vmax=vmax_gph,
-                           projection='PlateCarree',
                            plt_grid=True,
                            orientation='horizontal',
                            significance_mask=mask,
                            extend='both',
-                           bar=True if idx == 2 else None,
                            sci=-4,
-                           label=label_gph,
-                           round_dec=2,
+                           label=label_gph if idx == 2 else None,
                            tick_step=3
                            )
     this_comp_ts_u = tu.get_sel_tps_ds(
@@ -1147,15 +1035,12 @@ for idx, (group) in enumerate(plot_order):
                          plot_type='contourf',
                          levels=9,
                          vmin=vmin_uwind, vmax=vmax_uwind,
-                         projection='PlateCarree',
                          plt_grid=True,
                          orientation='horizontal',
                          significance_mask=mask,
                          extend='both',
-                         bar=True if idx == 2 else None,
                          sci=None,
-                         label=label_uwind,
-                         round_dec=2,
+                         label=label_uwind if idx == 2 else None,
                          tick_step=3
                          )
 
@@ -1174,15 +1059,12 @@ for idx, (group) in enumerate(plot_order):
                          plot_type='contourf',
                          levels=9,
                          vmin=vmin_vwind, vmax=vmax_vwind,
-                         projection='PlateCarree',
                          plt_grid=True,
                          orientation='horizontal',
                          significance_mask=mask,
                          extend='both',
-                         bar=True if idx == 2 else None,
                          sci=None,
-                         label=label_vwind,
-                         round_dec=2,
+                         label=label_vwind if idx == 2 else None,
                          tick_step=3
                          )
 
@@ -1223,7 +1105,7 @@ plevel_wgrad = 500
 
 an_type = 'JJAS'
 label_shear = rf'Vertical Shear (u200-u850) anomalies [m/s]'
-label_wgrad = rf'{plevel_vorticity }-hPa dw/dy an. [Pa/ms]'
+label_wgrad = r'500-hPa $\partial w/\partial y$ an. [Pa/ms]'
 label_vorticity = rf'{plevel_vorticity }-hPa RV anomalies [1/s]'
 
 var_type_shear = f'vertical_shear_an_{an_type}'
@@ -1309,7 +1191,7 @@ for idx, (group) in enumerate(plot_order):
     im_dw = cplt.plot_map(mean,
                           ax=im['ax'][idx*ncols + 1],
                           cmap='PiYG_r',
-                          title='dw/dy' if idx == 0 else None,
+                          title=r'$\partial w/\partial y$' if idx == 0 else None,
                           plot_type='contourf',
                           levels=9,
                           vmin=vmin_wgrad, vmax=vmax_wgrad,
@@ -1572,29 +1454,7 @@ for idx, plevel in enumerate(wind_levels):
         f"{output_folder}/propagation/{var_type}_{plevel}_day_{step}_groups.png"
     cplt.save_fig(savepath, fig=im['fig'])
 
-# %%
-# Define percentages of Early Warning Signals
-region = 'SA'
-prop_type = 'Canonical'
-tps_early_warning = k_means_tps_lon_lat[prop_type]
-# EE TS
-evs = loc_dict[region]['data'].evs
-t_all2 = tsa.get_ee_ts(evs=evs)
 
-
-t_jjas = tu.get_month_range_data(t_all2, start_month='Jun',
-                                 end_month='Sep')
-# tps = tps_dict['peaks']
-tps_eres = gut.get_quantile_of_ts(t_jjas, q=0.9)
-
-common_tps = tu.get_common_tps(tps_early_warning.time,
-                               tps_eres.time,
-                               offset=12, delay=20)
-
-print(len(common_tps)/len(tps_early_warning))
-print(common_tps)
-
-# %%
 # %%
 # Plot OLR background progression
 reload(tu)
@@ -1679,18 +1539,22 @@ for i, (group) in enumerate(plot_order):
     cplt.save_fig(savepath, fig=im['fig'])
 
 # %%
-# OLR propagation in 1 plot
+# ERE propagation in 1 plot
 reload(tu)
 reload(cplt)
 step = 1
-max_steps = 35
-lon_range_c = [50, 170]
-lat_range_c = [-20, 45]
+max_steps = 30
+lon_range_c = [50, 179]
+lat_range_c = [-20, 40]
 
 an_type = 'JJAS'
 var_type = f'an_{an_type}'
 label = f'day'
 
+# data_cut = sput.cut_map(ds=ds_olr.ds[var_type],
+#                         lon_range=lon_range_c,
+#                         lat_range=lat_range_c,
+#                         dateline=False)
 data_cut = sput.cut_map(ds=ds_olr.ds[var_type],
                         lon_range=lon_range_c,
                         lat_range=lat_range_c,
@@ -1704,18 +1568,21 @@ vmax = max_steps
 vmin = 0
 sci = None
 
-ncols = 3
-im = cplt.create_multi_plot(nrows=1,
+ncols = 1
+nrows = 3
+im = cplt.create_multi_plot(nrows=nrows,
                             ncols=ncols,
                             # figsize=(14, 6),
                             projection='PlateCarree',
                             orientation='horizontal',
-                            # hspace=0.25,
+                            hspace=0.0,
                             central_longitude=180,
-                            wspace=0.15,
+                            # wspace=0.05,
                             end_idx=3
                             )
-q_th = 0.05
+q_th = None
+th = -7.e4
+# th = 5
 plot_order = ['Canonical',
               'Eastward Blocked',
               'Stationary']
@@ -1730,21 +1597,24 @@ for idx, (group) in enumerate(plot_order):
                                               step=step,
                                               var=None,
                                               q_th=q_th,
-                                              th=-6.9e4)
+                                              th=th)
     im_comp = cplt.plot_map(day_arr[var_type],
                             ax=im['ax'][idx],
                             plot_type='colormesh',
                             cmap='rainbow',
                             vmin=vmin, vmax=vmax,
                             bar=True,
-                            title=f'{group}',
+                            vertical_title=f'{group}',
                             # levels=int(max_steps/step + 1),
                             extend='max',
                             plt_grid=True,
                             label='Day',
                             tick_step=2,
-                            round_dec=0)
+                            round_dec=0,
+                            orientation='vertical')
 
 savepath = plot_dir +\
     f"{output_folder}/paper_plots/olr_propagation_{step}_all.png"
 cplt.save_fig(savepath, fig=im['fig'])
+
+# %%

@@ -1,5 +1,10 @@
-# %%
-import xarray as xr
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec 22 08:53:08 2020
+File for estimate network communities
+@author: Felix Strnad
+"""import xarray as xr
 from matplotlib.patches import Rectangle
 import geoutils.utils.general_utils as gut
 import climnet.community_detection.membership_likelihood as ml
@@ -34,8 +39,8 @@ if start_month != "Jan" or end_month != "Dec":
 
 reload(eds)
 q_sig = 0.95
-lon_range = [-80, 170]
-lat_range = [-30, 50]
+lon_range = [-50, 140]
+lat_range = [-20, 50]
 nx_path_file = output_dir + \
     f"{output_folder}/{name_prefix}_{q_sig}_lat_{lat_range}_ES_nx.gml.gz"
 dataset_file = output_dir + \

@@ -1,4 +1,10 @@
-# %%
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec 22 08:53:08 2020
+File for running graph tool on climate network
+@author: Felix Strnad
+"""
 import climnet.community_detection.graph_tool.es_graph_tool as egt
 import climnet.network.clim_networkx as cn
 import climnet.datasets.evs_dataset as eds
@@ -33,8 +39,8 @@ job_id = gut.get_job_id()
 # %%
 reload(eds)
 q_sig = 0.95
-lon_range = [-80, 170]
-lat_range = [-30, 50]
+lon_range = [-50, 140]
+lat_range = [-20, 50]
 nx_path_file = output_dir + \
         f"{output_folder}/{name_prefix}_{q_sig}_lat_{lat_range}_ES_nx.gml.gz"
 dataset_file = output_dir + f"/{output_folder}/{name_prefix}_1979_2021_lat_{lat_range}_ds.nc"

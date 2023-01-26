@@ -1,4 +1,10 @@
-# %%
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec 22 08:53:08 2020
+File for network of rainfall events
+@author: Felix Strnad
+"""
 import os
 import climnet.network.clim_networkx as nx
 import climnet.datasets.evs_dataset as cds
