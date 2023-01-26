@@ -22,7 +22,7 @@ We recommend to create a new environment and install all required packages by ru
 conda env create -f submodules/climnet/condaEnv.yml
 conda activate climnetenv
 pip install graphriccicurvature
-pip install -e submodules/climnet/geoutils
+pip install -e submodules/geoutils
 pip install -e submodules/climnet
 ```
 
