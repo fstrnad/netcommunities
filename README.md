@@ -33,15 +33,16 @@ Download Precipitation data from [MSWEP](http://www.gloh2o.org/mswep/). Regrid t
 
 1. Create the corresponding dataset and graph
 ```
+python bin/create_ds.py
 python bin/create_net.py 
 python bin/cd_gt.py 
-python bin/t2m_create_net.py -data 'datapath' -s 'Nino_CP'
+python bin/prob_cd.py
 ```
-The networks created and later used for these plots are stored in 'outputs/'.
+The networks and community files are created and are stored in 'outputs/'. They are used for the paper plots later.
 
 2. Reproduce plots in the paper by running 
 ```
-python bin/paperplots.py -d 'datapath' -ep 'epNetPath' -cp 'cpNetPath' -normal 'normalNetPath'
+python bin/paper_plots.py
 ```
 
 
