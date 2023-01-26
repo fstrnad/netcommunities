@@ -8,7 +8,7 @@ An intuition on network community detection is given by:
 ![fig1](outputs/images/community_detection_full.png)
 ***
 
-## Clone the repo and install all required packages 
+## Clone the repo and install all required packages
 
 ### 1. Clone repository with submodules:
 ```
@@ -17,13 +17,13 @@ git clone --recurse-submodules git@github.com:fstrnad/netcommunities.git
 
 ### 2. Installing packages
 To reproduce our analysis described in the paper follow these steps:
-We recommend to create a new environment and install all required packages by running: 
+We recommend to create a new environment and install all required packages by running:
 ```
-conda env create -f submodules/climnet/condaEnv.yml 
-conda activate climnetenv 
+conda env create -f submodules/climnet/condaEnv.yml
+conda activate climnetenv
 pip install graphriccicurvature
-pip install -e submodules/climnet/geoutils 
-pip install -e submodules/climnet 
+pip install -e submodules/climnet/geoutils
+pip install -e submodules/climnet
 ```
 
 ### 3. Download data
@@ -34,15 +34,18 @@ Download Precipitation data from [MSWEP](http://www.gloh2o.org/mswep/). Regrid t
 1. Create the corresponding dataset and graph
 ```
 python bin/create_ds.py
-python bin/create_net.py 
-python bin/cd_gt.py 
+python bin/create_network.py
+python bin/lb_net.py
+python bin/cut_network.py
+python bin/cd_gt.py
 python bin/prob_cd.py
 ```
 The networks and community files are created and are stored in 'outputs/'. They are used for the paper plots later.
 
-2. Reproduce plots in the paper by running 
+2. Reproduce plots in the paper by running
 ```
 python bin/paper_plots.py
+python bin/paper_propagation.py
 ```
 
 
