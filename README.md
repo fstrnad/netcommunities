@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/575759590.svg)](https://zenodo.org/badge/latestdoi/575759590)
 
-# BSISO extreme rainfall propagation modulated by Pacific sea surface temperatures
+# Extreme rainfall propagation within Boreal Summer Intraseasonal Oscillation modulated by Pacific sea surface temperature
 We apply community detection on climate networks of Extreme Rainfall Events (EREs) to determine their intraseasonal variability.
 
 An intuition on network community detection is given by:
