@@ -64,7 +64,7 @@ The figures should look somehow similiar to the following:
 ![fig5](outputs/images/sst_mse_background_all.png)
 
 ***
-![fig6](outputs/images/propagation_msf_lon_lat_all)
+![fig6](outputs/images/propagation_msf_lon_lat_all.png)
 
 ***
 ![fig7](outputs/images/Kelvin_Rossby_Waves.png)
