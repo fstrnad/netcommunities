@@ -1,4 +1,6 @@
 [submodule "submodules/geoutils"]
 	path = submodules/geoutils
 	url = git@github.com:fstrnad/geoutils.git
-
+[submodule "submodules/climnet"]
+	path = submodules/climnet
+	url = https://github.com/mlcs/climnet
