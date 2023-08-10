@@ -5,7 +5,7 @@ We apply community detection on climate networks of Extreme Rainfall Events (ERE
 
 An intuition on network community detection is given by:
 ***
-![fig1](outputs/images/community_detection_full.png)
+![fig1](outputs/images/community_detection_full_new.png)
 ***
 
 ## Clone the repo and install all required packages
