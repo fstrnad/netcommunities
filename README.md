@@ -1,4 +1,5 @@
-[![DOI](https://zenodo.org/badge/575759590.svg)](https://zenodo.org/badge/latestdoi/575759590)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8233579.svg)](https://doi.org/10.5281/zenodo.8233579)
+
 
 # Extreme rainfall propagation within Boreal Summer Intraseasonal Oscillation modulated by Pacific sea surface temperature
 We apply community detection on climate networks of Extreme Rainfall Events (EREs) to determine their intraseasonal variability.
