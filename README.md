@@ -58,6 +58,16 @@ The figures should look somehow similiar to the following:
 ![fig3](outputs/images/conditioned_bsiso_phase.png)
 
 ***
-![fig4](outputs/images/sst_background_all.png)
+![fig4](outputs/images/propagation_olr_hovmoeller_k_means_lon_lat_EIO.png)
 
+***
+![fig5](outputs/images/sst_mse_background_all.png)
 
+***
+![fig6](outputs/images/propagation_msf_lon_lat_all)
+
+***
+![fig7](outputs/images/Kelvin_Rossby_Waves.png)
+
+***
+![fig9](outputs/images/olr_propagation_1_all.png)
